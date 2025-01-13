@@ -35,13 +35,13 @@ def process_emails():
     
     # Process each unprocessed entry
     for index, row in df[df['processed'] == 0].iterrows():
-        company_email = row['email']  # This is the recipient's email from CSV
         company_name = row['company']
+        recipient_email = row['email']
         
         print(f"\nProcessing application for: {company_name}")
-        print(f"Sending to: {company_email}")
+        print(f"Sending to: {recipient_email}")
         
-        # Generate email content
+        # Generate email content with Anthropic enhancement
         email_content = generate_email_content(company_name)
         
         # Print email details
@@ -52,11 +52,11 @@ def process_emails():
         print("=" * 50)
         
         # Send email
-        print(f"\nSending email to {company_name} ({company_email})...")
+        print(f"\nSending email to {company_name} ({recipient_email})...")
         success = email_sender.send_email(
             subject=email_content['subject'],
             body=email_content['body'],
-            recipient_email=company_email,  # Sending TO the company email
+            recipient_email=recipient_email,
             resume_path=resume_path
         )
         
@@ -69,13 +69,13 @@ def process_emails():
             df.at[index, 'processed'] = 1
             df.to_csv('dummy_data.csv', index=False)
             
-            print(f"Successfully sent email to {company_name} ({company_email})")
+            print(f"Successfully sent email to {company_name} ({recipient_email})")
         else:
-            print(f"Failed to send email to {company_name} ({company_email}), will retry in next run")
+            print(f"Failed to send email to {company_name} ({recipient_email}), will retry in next run")
         
-        # Wait for 5 seconds before next entry
-        print("\nWaiting 5 seconds before next application...\n")
-        time.sleep(5)
+        # Wait between emails to avoid rate limiting
+        print("\nWaiting 10 seconds before next application...\n")
+        time.sleep(10)
     
     print("All entries processed!")
 

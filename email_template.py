@@ -1,17 +1,75 @@
 from linkedin_info import get_company_info
+from anthropic_helper import ContentEnhancer
+
+# Initialize the content enhancer
+content_enhancer = ContentEnhancer()
+
+def get_resume_highlights():
+    """Get key highlights from resume"""
+    return """
+    Technical Skills:
+    - Proficient in Python, JavaScript, React, Node.js
+    - Experience with cloud platforms (AWS, GCP)
+    - Strong background in system design and architecture
+    
+    Recent Projects:
+    - Led development of scalable microservices architecture
+    - Implemented AI/ML solutions for data processing
+    - Built high-performance web applications
+    
+    Achievements:
+    - Reduced system response time by 40%
+    - Implemented automated testing, improving coverage by 75%
+    - Led team of 5 developers on critical projects
+    """
 
 def generate_email_content(company_name):
     # Get enhanced company information
     company_info = get_company_info(company_name)
+    company_info['company_name'] = company_name  # Add company name to info dict
     
-    # Create a more personalized subject line
-    subject = f"Software Engineer Position at {company_name} - Experienced in {company_info['specialties'].split(', ')[0]}"
+    # Get resume highlights
+    resume_data = get_resume_highlights()
     
-    # Create a more targeted body using all available information
+    # Generate enhanced content using Anthropic
+    enhanced_content = content_enhancer.enhance_email_content(company_info, resume_data)
+    
+    # Generate subject line
+    subject = content_enhancer.generate_subject_line(
+        company_name,
+        "Software Engineer",
+        company_info['specialties']
+    )
+    
+    # If Anthropic enhancement fails, use fallback template
+    if not enhanced_content:
+        return generate_fallback_content(company_name, company_info)
+    
+    # Create the email body using enhanced content
+    body = f"""Dear Hiring Manager at {company_name},
+
+{enhanced_content['opening']}
+
+{enhanced_content['middle']}
+
+{enhanced_content['closing']}
+
+Best regards,
+Yash Sharma"""
+
+    return {
+        "subject": subject,
+        "body": body
+    }
+
+def generate_fallback_content(company_name, company_info):
+    """Fallback template if Anthropic enhancement fails"""
     specialties = company_info['specialties']
     recent_news = company_info['recent_news']
     industry = company_info['industry']
     about = company_info['about']
+    
+    subject = f"Software Engineer Position at {company_name} - Experienced in {specialties.split(', ')[0]}"
     
     body = f"""Dear Hiring Manager at {company_name},
 

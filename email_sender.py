@@ -19,9 +19,15 @@ class EmailSender:
     def setup_smtp(self):
         """Setup SMTP connection with Gmail"""
         try:
+            # Use Gmail's SMTP server
             smtp = smtplib.SMTP('smtp.gmail.com', 587)
-            smtp.starttls()
+            smtp.ehlo()  # Identify ourselves to smtp gmail client
+            smtp.starttls()  # Secure our email with tls encryption
+            smtp.ehlo()  # Re-identify ourselves as an encrypted connection
+            
+            # Login to Gmail
             smtp.login(self.email_address, self.email_password)
+            print("Successfully connected to SMTP server")
             return smtp
         except Exception as e:
             print(f"Error setting up SMTP: {str(e)}")
@@ -53,12 +59,21 @@ class EmailSender:
         
         for attempt in range(max_retries):
             try:
+                print(f"\nAttempt {attempt + 1} to send email...")
+                
+                # Setup SMTP connection
                 smtp = self.setup_smtp()
+                
+                # Create and send message
                 msg = self.create_email_message(subject, body, recipient_email, resume_path)
                 smtp.send_message(msg)
+                
+                # Close the connection
                 smtp.quit()
+                
                 print(f"Successfully sent email to {recipient_email}")
                 return True
+                
             except Exception as e:
                 print(f"Attempt {attempt + 1} failed: {str(e)}")
                 if attempt < max_retries - 1:
