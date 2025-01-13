@@ -39,9 +39,21 @@ My Technical Background:{skills_str}
 {projects_str}
 
 Create three paragraphs:
-1. Opening: Connect my background with {company_name}'s recent developments ({company_info.get('recent_news')}). Show genuine interest in their mission.
-2. Middle: Highlight my most relevant skills and projects that match their specialties ({company_info.get('specialties')}). Include specific examples.
-3. Closing: Express enthusiasm for contributing to {company_name}'s specific initiatives and request an interview.
+1. Opening (First Paragraph): 
+   - Connect my background with {company_name}'s recent developments ({company_info.get('recent_news')})
+   - Show genuine interest in their mission
+   - Highlight 2-3 most relevant skills
+
+2. Middle (Second Paragraph):
+   - Highlight specific projects that match their specialties ({company_info.get('specialties')})
+   - Include concrete examples and technologies used
+   - Show impact and results
+
+3. Closing (Third Paragraph):
+   - Express enthusiasm for contributing to specific initiatives
+   - Request an interview
+   - Thank them for their consideration
+   - Keep it concise but impactful
 
 Guidelines:
 - Be specific about how my skills match their needs
@@ -49,8 +61,10 @@ Guidelines:
 - Focus on relevant technical achievements
 - Keep it professional but engaging
 - Show genuine interest in their specific work
+- Avoid generic phrases
+- Don't repeat the greeting "Dear Hiring Manager"
 
-Return ONLY the three paragraphs, separated by newlines."""
+Return ONLY the three paragraphs, separated by newlines, without any greetings or signatures."""
 
         try:
             response = self.client.messages.create(

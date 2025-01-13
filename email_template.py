@@ -46,7 +46,7 @@ def generate_email_content(company_name):
         if not subject:
             subject = f"Software Engineer Position at {company_name} - Full Stack Developer with Cloud Expertise"
         
-        # Create the email body
+        # Create the email body with single greeting
         body = f"""Dear Hiring Manager at {company_name},
 
 {enhanced_content['opening']}

@@ -59,7 +59,7 @@
       ],
       "impact": [
         "Developed multi-platform AI integration tool with 5 models",
-        "Improved user experience by 20%"
+        "20% improvement in user experience"
       ]
     },
     {
@@ -71,30 +71,29 @@
         "Tailwind CSS"
       ],
       "impact": [
-        "Achieved 20% faster rendering with Pixi.js",
-        "Augmented email customization by 40%",
-        "10x more customization with image positioning system"
+        "20% faster rendering with Pixi.js",
+        "40% increase in email customization",
+        "10x more image positioning customization"
       ]
     }
   ],
   "coreCompetencies": [
     "UI/UX Design",
     "Performance Optimization",
-    "System Architecture",
-    "Team Leadership"
+    "Workflow Streamlining"
   ],
   "notableAchievements": [
     {
       "achievement": "Revamped FIFO product UI/UX",
-      "impact": "Increased user engagement by 40%"
+      "impact": "40% increase in user engagement"
     },
     {
       "achievement": "Led email marketing tool development",
-      "impact": "Boosted client acquisition by 50%"
+      "impact": "50% boost in client acquisition"
     },
     {
       "achievement": "Developed WebGL-based video editor",
-      "impact": "Achieved 30% performance improvement"
+      "impact": "30% performance improvement"
     }
   ],
   "industryExperience": [
@@ -105,10 +104,10 @@
     "Software Development",
     "React.js",
     "Performance Optimization",
-    "UI/UX Design",
+    "UI/UX",
     "WebGL",
     "Pixi.js",
-    "Next.js",
-    "TypeScript"
+    "TypeScript",
+    "Next.js"
   ]
 }
