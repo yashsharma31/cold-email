@@ -2,8 +2,21 @@ import pandas as pd
 import time
 import os
 from email_template import generate_email_content
+from email_sender import EmailSender
+from dotenv import load_dotenv
 
 def process_emails():
+    # Load environment variables
+    load_dotenv()
+    
+    # Initialize email sender
+    try:
+        email_sender = EmailSender()
+    except ValueError as e:
+        print(f"Error: {str(e)}")
+        print("Please update the .env file with your email credentials")
+        return
+    
     # Read the CSV file
     df = pd.read_csv('dummy_data.csv')
     
@@ -14,12 +27,22 @@ def process_emails():
     
     processed_df = pd.read_csv(processed_file)
     
+    # Get resume path
+    resume_path = 'Yash-Sharma-Resume.pdf'
+    if not os.path.exists(resume_path):
+        print(f"Warning: Resume file not found at {resume_path}")
+        resume_path = None
+    
     # Process each unprocessed entry
     for index, row in df[df['processed'] == 0].iterrows():
-        print(f"\nProcessing application for: {row['company']}")
+        company_email = row['email']  # This is the recipient's email from CSV
+        company_name = row['company']
+        
+        print(f"\nProcessing application for: {company_name}")
+        print(f"Sending to: {company_email}")
         
         # Generate email content
-        email_content = generate_email_content(row['company'])
+        email_content = generate_email_content(company_name)
         
         # Print email details
         print("\nEmail Subject:", email_content['subject'])
@@ -28,13 +51,27 @@ def process_emails():
         print(email_content['body'])
         print("=" * 50)
         
-        # Add to processed entries
-        processed_df = pd.concat([processed_df, pd.DataFrame([row])], ignore_index=True)
-        processed_df.to_csv(processed_file, index=False)
+        # Send email
+        print(f"\nSending email to {company_name} ({company_email})...")
+        success = email_sender.send_email(
+            subject=email_content['subject'],
+            body=email_content['body'],
+            recipient_email=company_email,  # Sending TO the company email
+            resume_path=resume_path
+        )
         
-        # Update processed flag in original file
-        df.at[index, 'processed'] = 1
-        df.to_csv('dummy_data.csv', index=False)
+        if success:
+            # Add to processed entries
+            processed_df = pd.concat([processed_df, pd.DataFrame([row])], ignore_index=True)
+            processed_df.to_csv(processed_file, index=False)
+            
+            # Update processed flag in original file
+            df.at[index, 'processed'] = 1
+            df.to_csv('dummy_data.csv', index=False)
+            
+            print(f"Successfully sent email to {company_name} ({company_email})")
+        else:
+            print(f"Failed to send email to {company_name} ({company_email}), will retry in next run")
         
         # Wait for 5 seconds before next entry
         print("\nWaiting 5 seconds before next application...\n")
