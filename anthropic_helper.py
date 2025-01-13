@@ -7,36 +7,50 @@ class ContentEnhancer:
         load_dotenv()
         self.client = anthropic.Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
     
-    def enhance_email_content(self, company_info, resume_data):
+    def enhance_email_content(self, context):
         """Use Anthropic to enhance email content based on company and resume data"""
-        prompt = f"""You are an expert in crafting personalized job application emails. Create highly tailored content for an email 
-        to {company_info['company_name']} using the following information:
+        company_name = context['company_name']
+        company_info = context['company_info']
+        resume_analysis = context['resume_analysis']
+        
+        # Format technical skills
+        tech_skills = resume_analysis.get('technicalSkills', {})
+        skills_str = ""
+        for category, skills in tech_skills.items():
+            if isinstance(skills, list):
+                skills_str += f"\n- {category}: {', '.join(skills)}"
+        
+        # Format projects
+        projects = resume_analysis.get('keyProjects', [])
+        projects_str = "\nKey Projects:"
+        for project in projects:
+            if isinstance(project, dict):
+                projects_str += f"\n- {project.get('name')}: Using {', '.join(project.get('technologies', []))}"
+        
+        prompt = f"""Create a highly personalized job application email for {company_name} using this information:
 
-        Company Information:
-        - About: {company_info['about']}
-        - Recent News: {company_info['recent_news']}
-        - Specialties: {company_info['specialties']}
-        - Industry: {company_info['industry']}
+Company Details:
+- About: {company_info.get('about', 'A leading technology company')}
+- Recent News: {company_info.get('recent_news', 'Ongoing innovation')}
+- Specialties: {company_info.get('specialties', 'Technology')}
+- Industry: {company_info.get('industry', 'Technology')}
 
-        Resume Highlights:
-        {resume_data}
+My Technical Background:{skills_str}
+{projects_str}
 
-        Create three distinct paragraphs (separated by double newlines):
+Create three paragraphs:
+1. Opening: Connect my background with {company_name}'s recent developments ({company_info.get('recent_news')}). Show genuine interest in their mission.
+2. Middle: Highlight my most relevant skills and projects that match their specialties ({company_info.get('specialties')}). Include specific examples.
+3. Closing: Express enthusiasm for contributing to {company_name}'s specific initiatives and request an interview.
 
-        1. Opening: A compelling first paragraph that connects my background with the company's recent developments and shows genuine interest in their mission.
+Guidelines:
+- Be specific about how my skills match their needs
+- Reference their recent work and specialties
+- Focus on relevant technical achievements
+- Keep it professional but engaging
+- Show genuine interest in their specific work
 
-        2. Experience: A focused paragraph highlighting 2-3 most relevant experiences and skills that directly match their specialties and needs.
-
-        3. Closing: A strong final paragraph emphasizing specific contributions I could make and expressing enthusiasm for next steps.
-
-        Guidelines:
-        - Be professional but conversational
-        - Show deep knowledge of the company's work
-        - Focus on specific contributions, not generic statements
-        - Keep each paragraph concise (3-4 sentences max)
-        - Don't include salutation or signature
-        - Separate paragraphs with double newlines
-        """
+Return ONLY the three paragraphs, separated by newlines."""
 
         try:
             response = self.client.messages.create(
@@ -78,6 +92,7 @@ class ContentEnhancer:
         - Maximum 8-10 words
         - Don't use generic phrases like "applying for position"
         - Focus on value proposition
+        - Highlight specific expertise that matches company needs
         
         Return ONLY the subject line, nothing else."""
         

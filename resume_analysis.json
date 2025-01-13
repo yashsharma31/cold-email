@@ -1,0 +1,114 @@
+{
+  "technicalSkills": {
+    "languages": [
+      "TypeScript",
+      "JavaScript",
+      "Python"
+    ],
+    "frontendTechnologies": [
+      "React.js",
+      "Next.js",
+      "HTML",
+      "Tailwind CSS",
+      "CSS",
+      "Styled Components"
+    ],
+    "uiAndGraphics": [
+      "WebGL",
+      "Pixi.js",
+      "SVG Optimizations",
+      "Framer Motion",
+      "Material-UI"
+    ],
+    "stateManagement": [
+      "Redux",
+      "Redux-Saga",
+      "React Query",
+      "Zustand"
+    ],
+    "tools": [
+      "Git",
+      "AWS S3",
+      "CloudFront",
+      "EC2",
+      "Firebase",
+      "Supabase"
+    ]
+  },
+  "keyProjects": [
+    {
+      "name": "Glue",
+      "technologies": [
+        "Pixi.js",
+        "React Pixi",
+        "Next.js",
+        "Zustand",
+        "TypeScript"
+      ],
+      "impact": [
+        "Achieved 30% more efficiency with WebGL rendering",
+        "Reduced load time by 150ms"
+      ]
+    },
+    {
+      "name": "Dashgen",
+      "technologies": [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "impact": [
+        "Developed multi-platform AI integration tool with 5 models",
+        "Improved user experience by 20%"
+      ]
+    },
+    {
+      "name": "xG",
+      "technologies": [
+        "Next.js",
+        "React-Email",
+        "SVG",
+        "Tailwind CSS"
+      ],
+      "impact": [
+        "Achieved 20% faster rendering with Pixi.js",
+        "Augmented email customization by 40%",
+        "10x more customization with image positioning system"
+      ]
+    }
+  ],
+  "coreCompetencies": [
+    "UI/UX Design",
+    "Performance Optimization",
+    "System Architecture",
+    "Team Leadership"
+  ],
+  "notableAchievements": [
+    {
+      "achievement": "Revamped FIFO product UI/UX",
+      "impact": "Increased user engagement by 40%"
+    },
+    {
+      "achievement": "Led email marketing tool development",
+      "impact": "Boosted client acquisition by 50%"
+    },
+    {
+      "achievement": "Developed WebGL-based video editor",
+      "impact": "Achieved 30% performance improvement"
+    }
+  ],
+  "industryExperience": [
+    "Web Application Development",
+    "Creative Development Tools"
+  ],
+  "keywords": [
+    "Software Development",
+    "React.js",
+    "Performance Optimization",
+    "UI/UX Design",
+    "WebGL",
+    "Pixi.js",
+    "Next.js",
+    "TypeScript"
+  ]
+}

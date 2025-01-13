@@ -1,40 +1,71 @@
-from email_sender import EmailSender
+import os
+from dotenv import load_dotenv
 from email_template import generate_email_content
+from resume_analyzer import ResumeAnalyzer
+from email_sender import EmailSender
+import json
 
-def test_email():
-    # Initialize email sender
-    try:
-        email_sender = EmailSender()
-    except ValueError as e:
-        print(f"Error: {str(e)}")
+def test_complete_email_flow():
+    print("\n=== Testing Complete Email Flow ===\n")
+    
+    # 1. Test Resume Analysis
+    print("Step 1: Analyzing Resume...")
+    analyzer = ResumeAnalyzer()
+    analysis = analyzer.get_resume_analysis(force_refresh=True)
+    
+    if not analysis:
+        print("Failed to analyze resume")
         return
     
-    # Test company details
-    test_company = "Test Company"
-    test_recipient = "yash.sh0031@gmail.com"  # Sending to yourself for testing
+    print("\nResume Analysis Complete!")
+    print("Found skills in categories:", ", ".join(analysis.get("technicalSkills", {}).keys()))
     
-    # Generate test email content
+    # 2. Generate Enhanced Email
+    print("\nStep 2: Generating Enhanced Email...")
+    test_company = "Microsoft"  # Using Microsoft as a test case
     email_content = generate_email_content(test_company)
     
-    print(f"\nSending test email to: {test_recipient}")
-    print("\nEmail Subject:", email_content['subject'])
-    print("\nEmail Body:")
-    print("=" * 50)
-    print(email_content['body'])
-    print("=" * 50)
+    # 3. Display Generated Email
+    print("\n=== Generated Email ===\n")
+    print("To:", test_company)
+    print("Subject:", email_content["subject"])
+    print("\nBody:\n")
+    print(email_content["body"])
     
-    # Try to send the email
-    success = email_sender.send_email(
-        subject=email_content['subject'],
-        body=email_content['body'],
-        recipient_email=test_recipient,
-        resume_path='Yash-Sharma-Resume.pdf'  # Will show warning if file doesn't exist
-    )
+    # 4. Test Email Sending
+    print("\nStep 3: Testing Email Sending...")
+    try:
+        sender = EmailSender()
+        test_recipient = "yash.sh0031@gmail.com"  # Your email for testing
+        
+        print(f"\nSending test email to: {test_recipient}")
+        success = sender.send_email(
+            subject=email_content["subject"],
+            body=email_content["body"],
+            recipient_email=test_recipient,
+            resume_path="Yash-Sharma-Resume.pdf"
+        )
+        
+        if success:
+            print("\nTest email sent successfully!")
+        else:
+            print("\nFailed to send test email")
+            
+    except Exception as e:
+        print(f"\nError during email sending: {str(e)}")
     
-    if success:
-        print("\nTest email sent successfully!")
-    else:
-        print("\nFailed to send test email. Please check your credentials and try again.")
+    print("\n=== Test Complete ===")
 
 if __name__ == "__main__":
-    test_email() 
+    load_dotenv()
+    
+    # Check for required environment variables
+    missing_vars = []
+    for var in ["ANTHROPIC_API_KEY", "EMAIL_ADDRESS", "EMAIL_PASSWORD"]:
+        if not os.getenv(var):
+            missing_vars.append(var)
+    
+    if missing_vars:
+        print("Error: Missing required environment variables:", ", ".join(missing_vars))
+    else:
+        test_complete_email_flow() 
