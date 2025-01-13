@@ -1,6 +1,7 @@
 import pandas as pd
 import time
 import os
+from email_template import generate_email_content
 
 def process_emails():
     # Read the CSV file
@@ -15,7 +16,17 @@ def process_emails():
     
     # Process each unprocessed entry
     for index, row in df[df['processed'] == 0].iterrows():
-        print(f"Processing: {row['email']} from {row['company']}")
+        print(f"\nProcessing application for: {row['company']}")
+        
+        # Generate email content
+        email_content = generate_email_content(row['company'])
+        
+        # Print email details
+        print("\nEmail Subject:", email_content['subject'])
+        print("\nEmail Body:")
+        print("=" * 50)
+        print(email_content['body'])
+        print("=" * 50)
         
         # Add to processed entries
         processed_df = pd.concat([processed_df, pd.DataFrame([row])], ignore_index=True)
@@ -25,7 +36,8 @@ def process_emails():
         df.at[index, 'processed'] = 1
         df.to_csv('dummy_data.csv', index=False)
         
-        # Wait for 5 seconds
+        # Wait for 5 seconds before next entry
+        print("\nWaiting 5 seconds before next application...\n")
         time.sleep(5)
     
     print("All entries processed!")
